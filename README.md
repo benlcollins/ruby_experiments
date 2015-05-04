@@ -1,3 +1,3 @@
 # ruby_experiments
 
-Workings file containing programs and snippets of Ruby code and test Rails apps
+Workings file containing programs and Ruby code snippets
