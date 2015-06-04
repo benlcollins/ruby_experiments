@@ -12,11 +12,13 @@ even_check = lambda { |*arr|  arr.all? { |i| i.even? } }
 
 # Q2
 # Find all of the prime factors for a given number
+# http://ruby-doc.org/stdlib-1.9.3/libdoc/prime/rdoc/Prime.html
 def prime_factors(num)
   arr = []
 	Prime.each(num) { |prime| num % prime == 0 ? arr.push(prime) : false }
   return arr
 end
+binding.pry
 print prime_factors(420)
 puts "\n"
 
@@ -29,7 +31,9 @@ end
 print prime_factors2(420)
 puts "\n"
 
-# binding.pry
+# Q3
+
+
 
 # Code Quizzes
 # http://www.codequizzes.com/ruby/intermediate-ruby
@@ -105,7 +109,30 @@ end
 print a.map { |word, times| [word].cycle(times).to_a }.flatten
 
 
+# Fizz Buzz
+100.times do |i|
+	if i % 3 == 0 && i % 5 == 0
+		puts "fizzbuzz"
+	elsif i % 5 == 0 
+		puts "buzz"
+	elsif i % 3 == 0
+		puts "fizz"
+	else 
+		puts i
+	end
+end
 
+# better
+1.upto(100) do |i|
+	fizz = (i % 3 == 0)
+	buzz = (i % 5 == 0)
+	puts case 
+		when fizz && buzz then 'FizzBuzz'
+		when fizz then 'Fizz'
+		when buzz then 'Buzz'
+		else i
+	end
+end
 
 
 # binding.pry
