@@ -135,6 +135,7 @@ end
 
 
 # Step 6: Print out the triangle in Pry, with correct spacing
+# This is still a work in progress!!!
 
 def print_pt(n)
 	l = 0
