@@ -1,6 +1,6 @@
 require 'pry'
 
-# Q1. write a method that will return Pascal's triangle up to n rows
+# Q1. write a method that will return Pascal's triangle up to n rows, e.g.
 #       1
 #      1 1
 #     1 2 1
@@ -12,7 +12,12 @@ require 'pry'
 # in the n-th row of a pascal triangle
 # e.g. for n = 5 output should be [1,5,10]
 
-# Second solution with refactored code
+# Some solutions/discussions online:
+# http://rubyquiz.com/quiz84.html
+# http://stackoverflow.com/questions/19205195/pascals-triangle-in-ruby
+
+
+# My second solution with refactored code
 
 def array_transform(array)
 	b = []
@@ -24,8 +29,9 @@ def array_transform(array)
 end
 
 def pasc_tri_v2(n)
-	pt = b = [[1]]
-	n.times do
+	pt = [[1]]
+	b = pt
+	(n-1).times do
 		next_array = array_transform(b)
 		pt.push(next_array)
 		b = next_array
@@ -39,7 +45,7 @@ end
 
 
 
-# First solution
+# My first solution
 
 def build_new_array_from(array)
 	b = []
