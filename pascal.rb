@@ -138,15 +138,14 @@ end
 # This is still a work in progress!!!
 
 def print_pt(n)
+	max_num = pt_nth_row_v2(n).sort.last.to_s.size
 	l = 0
 	pt_nth_row_v2(n).each do |int|
-		l += int.to_s.size
+		l += int.to_s.size + max_num
 	end
-	(n+1).times do |i|
-		print " "*((l - i)/2)
-		puts pt_nth_row_v2(i).join(" ") if i > 0
+	n.times do |i|
+		puts pt_nth_row_v2(i).join(" "*max_num).center(l) if i > 0
 	end
-	return "The End!"
 end
 
 
