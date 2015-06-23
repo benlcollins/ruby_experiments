@@ -12,19 +12,47 @@
 # contains 23 letters and 115 (one hundred and fifteen) contains 20 letters. 
 # The use of "and" when writing out numbers is in compliance with British usage.
 
+# NOTE 2: The code below works but I plan to come back and refactor at some point. 
+
 require 'pry'
 
 # setup initial word arrays as instance variables
-@words = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
-					 "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", 
-					 "seventeen", "eighteen", "nineteen", "twenty"]
+@words = ["zero", 
+					"one", 
+					"two", 
+					"three", 
+					"four", 
+					"five", 
+					"six", 
+					"seven", 
+					"eight", 
+					"nine",
+					"ten", 
+					"eleven", 
+					"twelve", 
+					"thirteen", 
+					"fourteen", 
+					"fifteen", 
+					"sixteen", 
+					"seventeen", 
+					"eighteen", 
+					"nineteen", 
+					"twenty"]
 
-@tens = ["zero", "ten", "twenty", "thirty", "fourty", "fifty", "sixty", "seventy", "eighty", "ninety"]
-
+@tens =  ["zero", 
+					"ten", 
+					"twenty", 
+					"thirty", 
+					"forty", 
+					"fifty", 
+					"sixty", 
+					"seventy", 
+					"eighty", 
+					"ninety"]
 
 
 # method to "wordify" any number between 1 and 99
-def one_hundred(number)
+def wordify_upto_99(number)
 	# deal with the numbers 20 and under, straight from array
 	if number < 21
 		word = @words[number]
@@ -39,7 +67,7 @@ def one_hundred(number)
 		end
 		word = first + " " + second
 	else
-		alert("Number greater than 100! Not allowed with this method")
+		return "Number greater than 100! Not allowed with this method"
 	end
 	return word
 end
@@ -49,7 +77,7 @@ end
 def wordify(number)
 	# for numbers less than 100
 	if number < 100
-		word = one_hundred(number)
+		word = wordify_upto_99(number)
 
 	# numbers 100 to 999
 	elsif number < 1000
@@ -60,7 +88,7 @@ def wordify(number)
 		if number.to_s.slice(1,2) == "00"
 			second_part = ""
 		else
-			second_part = " and " + one_hundred(number.to_s.slice(1,2).to_i)
+			second_part = " and " + wordify_upto_99(number.to_s.slice(1,2).to_i)
 		end
 
 		# put it all together
@@ -76,7 +104,7 @@ end
 
 
 # method to get the length of the "wordified" number
-def num_word_length(number)
+def word_number_length(number)
 	return wordify(number).delete(' ').length
 end
 
@@ -85,23 +113,19 @@ end
 def number_letter_count(n)
 	total = 0
 	n.times do |i|
-		# puts wordify(i+1)
-		total += num_word_length(i+1)
+		# puts wordify(i+1)  # uncomment if you want to print out the numbers
+		total += word_number_length(i+1)
 	end
 	return total
 end
 
 
-
 # corresponding method to "de-wordify" a word number e.g.
 # eight
-# fourteen
 # thirty six
-# eighty
 # two hundred
 # six hundred and forty one
-# one thousand
-def dewordify(word_number)
+def dewordify_upto_99(word_number)
 	array = word_number.split(' ')
 
 	if @words.include?(word_number) # scenario for numbers up to 20
@@ -112,27 +136,80 @@ def dewordify(word_number)
 		else
 			return (@tens.index(array[0]) * 10) + @words.index(array[1])
 		end
+	else
+		return "Too big"
+	end
+end
+
+
+def dewordify(word_number)
+	array = word_number.split(' ')
+
+	if dewordify_upto_99(word_number) != "Too big"
+		return dewordify_upto_99(word_number)
 	elsif array[1] == "hundred" # scenario for numbers between 100 and 999
 		if array.length == 2
 			return @words.index(array[0]) * 100
+		elsif array.length == 4
+			first = @words.index(array[0]) * 100
+			second = dewordify_upto_99(array[3])
+			return first.to_i + second.to_i
 		else
-			binding.pry
+			first = @words.index(array[0]) * 100
+			second = dewordify_upto_99(array[3,4].join(" "))
+			return first.to_i + second.to_i
 		end
 	elsif (array[0] == "thousand" && array.length == 1) || (array[0] == "one" && array[1] == "thousand")
 		return 1000
 	else
 		return "Not valid. Please only call method for numbers less than 1000"
 	end
-
-
-	# binding.pry
-	# return number
 end
 
-	# # deal with the straightforward cases that exist in @words or @tens array
-	# if array.length == 1 && (@words.include? array[0])
-	# 	number = @words.index(array[0])
-	# elsif array.length == 1 && (@tens.include? array[0])
-	# 	number = @tens.index(array[0]) * 10
-	# end
+
+# Arithmetic operations on word numbers
+
+def plus(word_number1, word_number2)
+	result = dewordify(word_number1) + dewordify(word_number2)
+	if result > 1000
+		return "Sorry answer > 1000"
+	else
+		return wordify(result)
+	end
+end
+
+def subtract(word_number1, word_number2)
+	result = dewordify(word_number1) - dewordify(word_number2)
+	if result < 0
+		return "Sorry answer < 0"
+	else
+		return wordify(result)
+	end
+end
+
+def multiply(word_number1, word_number2)
+	result = dewordify(word_number1) * dewordify(word_number2)
+	if result > 1000
+		return "Sorry answer > 1000"
+	else
+		return wordify(result)
+	end
+end
+
+def divide(word_number1, word_number2)
+	result = dewordify(word_number1).to_f / dewordify(word_number2).to_f
+	if result.floor == result
+		return wordify(result)
+	else
+		return "Sorry answer not an integer"
+	end
+end
+
+
+
+
 binding.pry
+
+
+
+
